@@ -90,7 +90,11 @@ function triangle(value1, type1, value2, type2) {
 }
 
 // Test examples
+console.log('triangle(60, "opposite angle", 5, "leg");');
 triangle(60, "opposite angle", 5, "leg"); // Works regardless of order
+console.log('triangle(5, "leg", 60, "opposite angle");');
 triangle(5, "leg", 60, "opposite angle"); // Also works in reverse order
+console.log('triangle(10, "hypotenuse", 30, "angle");');
 triangle(10, "hypotenuse", 30, "angle");  // Works for hypotenuse + angle
+console.log('triangle(5, "leg", 5, "leg");');
 triangle(5, "leg", 5, "leg");  // Works for two legs
