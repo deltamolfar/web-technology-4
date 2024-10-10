@@ -1,63 +1,76 @@
-// Helper function to convert degrees to radians
+console.clear();
+
 function degToRad(deg) {
     return deg * (Math.PI / 180);
 }
 
-// Helper function to convert radians to degrees
 function radToDeg(rad) {
     return rad * (180 / Math.PI);
 }
 
-// Helper function: given two legs, calculates all sides and angles
 function calcFromTwoLegs(a, b) {
     if (a <= 0 || b <= 0) return null;
-    let c = Math.sqrt(a * a + b * b);  // Pythagorean theorem
-    let alpha = radToDeg(Math.atan(a / b)); // Opposite angle to a
-    let beta = 90 - alpha; // The other acute angle
+    let c = Math.sqrt(a * a + b * b);
+    let alpha = radToDeg(Math.atan(a / b));
+    let beta = 90 - alpha;
     return { a, b, c, alpha, beta };
 }
 
-// Helper function: given a leg and the hypotenuse, calculates all sides and angles
 function calcFromLegAndHypotenuse(a, c) {
     if (a <= 0 || c <= a) return null;
-    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
-    let alpha = radToDeg(Math.asin(a / c)); // Opposite angle to a
-    let beta = 90 - alpha; // The other acute angle
+    let b = Math.sqrt(c * c - a * a);
+    let alpha = radToDeg(Math.asin(a / c));
+    let beta = 90 - alpha;
     return { a, b, c, alpha, beta };
 }
 
-// Helper function: given a leg and an opposite angle, calculates all sides and angles
 function calcFromLegAndOppositeAngle(a, alpha) {
     if (a <= 0 || alpha <= 0 || alpha >= 90) return null;
-    let c = a / Math.sin(degToRad(alpha));  // Hypotenuse from sine rule
-    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
-    let beta = 90 - alpha; // The other acute angle
+    let c = a / Math.sin(degToRad(alpha));
+    let b = Math.sqrt(c * c - a * a);
+    let beta = 90 - alpha;
     return { a, b, c, alpha, beta };
 }
 
-// Helper function: given a leg and an adjacent angle, calculates all sides and angles
 function calcFromLegAndAdjacentAngle(a, beta) {
     if (a <= 0 || beta <= 0 || beta >= 90) return null;
-    let c = a / Math.cos(degToRad(beta));  // Hypotenuse from cosine rule
-    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
-    let alpha = 90 - beta; // The other acute angle
+    let c = a / Math.cos(degToRad(beta));
+    let b = Math.sqrt(c * c - a * a);
+    let alpha = 90 - beta;
     return { a, b, c, alpha, beta };
 }
 
-// Helper function: given a hypotenuse and an angle, calculates all sides and angles
 function calcFromHypotenuseAndAngle(c, alpha) {
     if (c <= 0 || alpha <= 0 || alpha >= 90) return null;
-    let a = c * Math.sin(degToRad(alpha));  // Opposite side (a) from sine rule
-    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
-    let beta = 90 - alpha; // The other acute angle
+    let a = c * Math.sin(degToRad(alpha));
+    let b = Math.sqrt(c * c - a * a);
+    let beta = 90 - alpha;
     return { a, b, c, alpha, beta };
 }
 
-// Main function that figures out the right combination
 function triangle(value1, type1, value2, type2) {
+    if( value1 === undefined || type1 === undefined || value2 === undefined || type2 === undefined) {
+        console.log("Error: не всі аргументи були передані.");
+        return "failed";
+    }
+
+    if( typeof value1 !== "number" || typeof value2 !== "number") {
+        console.log("Error: аргументи value1 та/або value2 повинні бути числами.");
+        return "failed";
+    }
+
+    if( typeof type1 !== "string" || typeof type2 !== "string") {
+        console.log("Error: аргументи type1 та/або type2 повинні бути рядками.");
+        return "failed";
+    }
+
+    if( value1 <= 0 || value2 <= 0) {
+        console.log("Error: аргументи value1 та/або value2 повинні бути додатніми числами.");
+        return "failed";
+    }
+
     let a, b, c, alpha, beta;
 
-    // Normalize inputs: ensure we process leg + angle, hypotenuse + angle, etc.
     const combinations = [
         { firstType: "leg", secondType: "leg", calc: calcFromTwoLegs },
         { firstType: "leg", secondType: "hypotenuse", calc: calcFromLegAndHypotenuse },
@@ -70,11 +83,8 @@ function triangle(value1, type1, value2, type2) {
         let result = undefined;
         if (type1 === combo.firstType && type2 === combo.secondType) {
             result = combo.calc(value1, value2);
-        } else if (type2 === combo.firstType && type2 === combo.secondType ){
+        } else if (type1 === combo.secondType && type2 === combo.firstType ){
             result = combo.calc(value2, value1);
-        } else{
-            console.log("Error: невідома або несумісна комбінація типів аргументів.");
-            return "failed";
         }
 
         if (result) {
@@ -87,14 +97,16 @@ function triangle(value1, type1, value2, type2) {
             return "success";
         }
     }
+
+    console.log("Error: невідома або несумісна комбінація типів аргументів.");
+    return "failed";
 }
 
-// Test examples
+console.log('triangle(7, "leg", 18, "hypotenuse");');
+triangle(7, "leg", 18, "hypotenuse");
+
 console.log('triangle(60, "opposite angle", 5, "leg");');
-triangle(60, "opposite angle", 5, "leg"); // Works regardless of order
-console.log('triangle(5, "leg", 60, "opposite angle");');
-triangle(5, "leg", 60, "opposite angle"); // Also works in reverse order
-console.log('triangle(10, "hypotenuse", 30, "angle");');
-triangle(10, "hypotenuse", 30, "angle");  // Works for hypotenuse + angle
-console.log('triangle(5, "leg", 5, "leg");');
-triangle(5, "leg", 5, "leg");  // Works for two legs
+triangle(60, "opposite angle", 5, "leg");
+
+console.log('triangle(43.13, "angle", -2, "hypotenuse");');
+triangle(43.13, "angle", -2, "hypotenuse");
