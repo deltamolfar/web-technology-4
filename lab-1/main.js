@@ -1,103 +1,96 @@
-function triangle(value1, type1, value2, type2) {
-    if (arguments.length !== 4) {
-        console.log("Помилка: необхідно ввести 4 аргументи.");
-        return "failed";
-    }
-
-    const inputs = [
-        { value: value1, type: type1.toLowerCase() },
-        { value: value2, type: type2.toLowerCase() }
-    ];
-
-    let a, b, c, alpha, beta;
-
-    const toRadians = (degrees) => degrees * (Math.PI / 180);
-    const toDegrees = (radians) => radians * (180 / Math.PI);
-
-    const validTypes = ['leg', 'hypotenuse', 'adjacent angle', 'opposite angle', 'angle'];
-    for (let input of inputs) {
-        if (!validTypes.includes(input.type)) {
-            console.log(`Помилка: невідомий тип '${input.type}'. Будь ласка, перевірте інструкцію.`);
-            return "failed";
-        }
-    }
-
-    // Перевірка на унікальність типів (неможливо мати два гіпотенузи, наприклад)
-    const typesSet = new Set(inputs.map(input => input.type));
-
-    if ((inputs[0].type === 'leg' && inputs[1].type === 'hypotenuse') ||
-        (inputs[1].type === 'leg' && inputs[0].type === 'hypotenuse')) {
-        let leg = inputs.find(input => input.type === 'leg').value;
-        let hypotenuse = inputs.find(input => input.type === 'hypotenuse').value;
-
-        if (leg <= 0 || hypotenuse <= 0) {
-            console.log("Помилка: значення сторін повинні бути додатніми числами.");
-            return "failed";
-        }
-        if (leg >= hypotenuse) {
-            console.log("Помилка: катет не може бути більшим або рівним гіпотенузі.");
-            return "failed";
-        }
-
-        b = Math.sqrt(Math.pow(hypotenuse, 2) - Math.pow(leg, 2));
-        a = leg;
-        c = hypotenuse;
-
-        alpha = toDegrees(Math.asin(a / c));
-        beta = toDegrees(Math.asin(b / c));
-
-    } else if (inputs[0].type === 'leg' && inputs[1].type === 'leg') {
-        a = inputs[0].value;
-        b = inputs[1].value;
-
-        if (a <= 0 || b <= 0) {
-            console.log("Помилка: значення катетів повинні бути додатніми числами.");
-            return "failed";
-        }
-
-        c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-
-        alpha = toDegrees(Math.atan(a / b));
-        beta = toDegrees(Math.atan(b / a));
-    } else if ((inputs[0].type === 'leg' && inputs[1].type === 'adjacent angle') ||
-             (inputs[1].type === 'leg' && inputs[0].type === 'adjacent angle')) {
-        let leg = inputs.find(input => input.type === 'leg').value;
-        let adjacentAngle = inputs.find(input => input.type === 'adjacent angle').value;
-
-        if (leg <= 0) {
-            console.log("Помилка: значення катета повинно бути додатнім числом.");
-            return "failed";
-        }
-        if (adjacentAngle <= 0 || adjacentAngle >= 90) {
-            console.log("Помилка: прилеглий кут повинен бути гострим (менше 90°).");
-            return "failed";
-        }
-
-        alpha = adjacentAngle;
-        beta = 90 - alpha;
-        a = leg;
-        b = a / Math.tan(toRadians(alpha));
-        c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-    } else {
-        console.log("Помилка: невідома або несумісна комбінація типів аргументів.");
-        return "failed";
-    }
-
-    console.log(`Сторони трикутника:`);
-    console.log(`a (катет) = ${a.toFixed(2)}`);
-    console.log(`b (катет) = ${b.toFixed(2)}`);
-    console.log(`c (гіпотенуза) = ${c.toFixed(2)}`);
-    console.log(`Кути трикутника:`);
-    console.log(`alpha (протилежний до a) = ${alpha.toFixed(2)}°`);
-    console.log(`beta (протилежний до b) = ${beta.toFixed(2)}°`);
-
-    return "success";
+// Helper function to convert degrees to radians
+function degToRad(deg) {
+    return deg * (Math.PI / 180);
 }
 
+// Helper function to convert radians to degrees
+function radToDeg(rad) {
+    return rad * (180 / Math.PI);
+}
 
-console.log(triangle(4, "leg", 8, "hypotenuse"));
-console.log(triangle(8, "hypotenuse", 4, "leg"));
-console.log(triangle(3, "leg", 4, "leg"));
-console.log(triangle(5, "leg", 30, "adjacent angle"));
-console.log(triangle(5, "leg", 30, "adjacent_angle")); // Помилка очікувана
-console.log(triangle(5, "hypotenuse", 30, "adjacent angle")); // Помилка очікувана
+// Helper function: given two legs, calculates all sides and angles
+function calcFromTwoLegs(a, b) {
+    if (a <= 0 || b <= 0) return null;
+    let c = Math.sqrt(a * a + b * b);  // Pythagorean theorem
+    let alpha = radToDeg(Math.atan(a / b)); // Opposite angle to a
+    let beta = 90 - alpha; // The other acute angle
+    return { a, b, c, alpha, beta };
+}
+
+// Helper function: given a leg and the hypotenuse, calculates all sides and angles
+function calcFromLegAndHypotenuse(a, c) {
+    if (a <= 0 || c <= a) return null;
+    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
+    let alpha = radToDeg(Math.asin(a / c)); // Opposite angle to a
+    let beta = 90 - alpha; // The other acute angle
+    return { a, b, c, alpha, beta };
+}
+
+// Helper function: given a leg and an opposite angle, calculates all sides and angles
+function calcFromLegAndOppositeAngle(a, alpha) {
+    if (a <= 0 || alpha <= 0 || alpha >= 90) return null;
+    let c = a / Math.sin(degToRad(alpha));  // Hypotenuse from sine rule
+    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
+    let beta = 90 - alpha; // The other acute angle
+    return { a, b, c, alpha, beta };
+}
+
+// Helper function: given a leg and an adjacent angle, calculates all sides and angles
+function calcFromLegAndAdjacentAngle(a, beta) {
+    if (a <= 0 || beta <= 0 || beta >= 90) return null;
+    let c = a / Math.cos(degToRad(beta));  // Hypotenuse from cosine rule
+    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
+    let alpha = 90 - beta; // The other acute angle
+    return { a, b, c, alpha, beta };
+}
+
+// Helper function: given a hypotenuse and an angle, calculates all sides and angles
+function calcFromHypotenuseAndAngle(c, alpha) {
+    if (c <= 0 || alpha <= 0 || alpha >= 90) return null;
+    let a = c * Math.sin(degToRad(alpha));  // Opposite side (a) from sine rule
+    let b = Math.sqrt(c * c - a * a);  // Pythagorean theorem
+    let beta = 90 - alpha; // The other acute angle
+    return { a, b, c, alpha, beta };
+}
+
+// Main function that figures out the right combination
+function triangle(value1, type1, value2, type2) {
+    let a, b, c, alpha, beta;
+
+    // Normalize inputs: ensure we process leg + angle, hypotenuse + angle, etc.
+    const combinations = [
+        { firstType: "leg", secondType: "leg", calc: calcFromTwoLegs },
+        { firstType: "leg", secondType: "hypotenuse", calc: calcFromLegAndHypotenuse },
+        { firstType: "leg", secondType: "opposite angle", calc: calcFromLegAndOppositeAngle },
+        { firstType: "leg", secondType: "adjacent angle", calc: calcFromLegAndAdjacentAngle },
+        { firstType: "hypotenuse", secondType: "angle", calc: calcFromHypotenuseAndAngle },
+    ];
+
+    for (const combo of combinations) {
+        let result = undefined;
+        if (type1 === combo.firstType && type2 === combo.secondType) {
+            result = combo.calc(value1, value2);
+        } else if (type2 === combo.firstType && type2 === combo.secondType ){
+            result = combo.calc(value2, value1);
+        } else{
+            console.log("Error: невідома або несумісна комбінація типів аргументів.");
+            return "failed";
+        }
+
+        if (result) {
+            ({ a, b, c, alpha, beta } = result);
+            console.log(`a = ${a.toFixed(2)}`);
+            console.log(`b = ${b.toFixed(2)}`);
+            console.log(`c = ${c.toFixed(2)}`);
+            console.log(`alpha = ${alpha.toFixed(2)}°`);
+            console.log(`beta = ${beta.toFixed(2)}°`);
+            return "success";
+        }
+    }
+}
+
+// Test examples
+triangle(60, "opposite angle", 5, "leg"); // Works regardless of order
+triangle(5, "leg", 60, "opposite angle"); // Also works in reverse order
+triangle(10, "hypotenuse", 30, "angle");  // Works for hypotenuse + angle
+triangle(5, "leg", 5, "leg");  // Works for two legs
