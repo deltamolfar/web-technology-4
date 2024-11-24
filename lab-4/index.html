@@ -1,42 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>LAB 4</title>
+	<meta charset="utf-8">
+	<title>LAB 4</title>
 </head>
 <body>
-    <dialog id="gamestart">
-        <div>
-            <h2>Pixel Hunt</h2>
-            <p>Click on the colored squares as fast as you can!</p>
-            <select id="difficulty">
-                <option value="1">Easy</option>
-                <option value="2">Medium</option>
-                <option value="3">Hard</option>
-            </select>
-            <select id="color">
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="yellow">Yellow</option>
-            </select>
-            <button id="startGame">Start</button>
-        </div>
-    </dialog>
-    <dialog id="gameover">
-        <div>
-            <h2>Game Over!</h2>
-            <p>Your score: <span id="score">0</span></p>
-            <button onclick="location.reload()">Restart</button>
-        </div>
-    </dialog>
-    <h1 style="margin: 0;">Pixel Hunt</h1>
-    <h3 style="margin: 0;">Time left: <span id="timer">-1</span></h3>
-    <div id="field" style="min-height: 90vh; min-width: 100%; background-color: lightgray; position: relative;"></div>
+	<dialog id="gamestart">
+		<div>
+			<h2>Pixel Hunt</h2>
+			<p>Click on the colored squares as fast as you can!</p>
+			<select id="difficulty">
+				<option value="1">Easy</option>
+				<option value="2">Medium</option>
+				<option value="3">Hard</option>
+			</select>
+			<select id="color">
+				<option value="red">Red</option>
+				<option value="green">Green</option>
+				<option value="yellow">Yellow</option>
+			</select>
+			<button id="startGame">Start</button>
+		</div>
+	</dialog>
+	<dialog id="gameover">
+		<div>
+			<h2>Game Over!</h2>
+			<p>Your score: <span id="score">0</span></p>
+			<button onclick="location.reload()">Restart</button>
+		</div>
+	</dialog>
+	<h1 style="margin: 0;">Pixel Hunt</h1>
+	<h3 style="margin: 0;">Time left: <span id="timer">-1</span></h3>
+	<div id="field" style="min-height: 90vh; min-width: 100%; background-color: lightgray; position: relative;"></div>
 </body>
 </html>
 
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
+	window.addEventListener('DOMContentLoaded', () => {
     const scoreElement = document.getElementById('score');
     const timerElement = document.getElementById('timer');
     const field = document.getElementById('field');
@@ -51,58 +51,58 @@
     let lastBox = null;
 
     function nextBox() {
-        const box = document.createElement('div');
-        box.style.width = `${boxWidth}px`;
-        box.style.height = `${boxWidth}px`;
-        box.style.backgroundColor = color;
-        box.style.position = 'absolute';
+			const box = document.createElement('div');
+			box.style.width = `${boxWidth}px`;
+			box.style.height = `${boxWidth}px`;
+			box.style.backgroundColor = color;
+			box.style.position = 'absolute';
 
-        const fieldRect = field.getBoundingClientRect();
-        const top = Math.random() * (fieldRect.height - boxWidth);
-        const left = Math.random() * (fieldRect.width - boxWidth);
+			const fieldRect = field.getBoundingClientRect();
+			const top = Math.random() * (fieldRect.height - boxWidth);
+			const left = Math.random() * (fieldRect.width - boxWidth);
 
-        box.style.top = `${top}px`;
-        box.style.left = `${left}px`;
-        box.addEventListener('click', boxClk);
+			box.style.top = `${top}px`;
+			box.style.left = `${left}px`;
+			box.addEventListener('click', boxClk);
 
-        if (lastBox) {
-            field.removeChild(lastBox);
-        }
-        lastBox = box;
-        field.appendChild(box);
+			if (lastBox) {
+				field.removeChild(lastBox);
+			}
+			lastBox = box;
+			field.appendChild(box);
     }
 
     gamestartDialog.showModal();
 
     function startGame() {
-        difficulty = document.getElementById('difficulty').value;
-        boxWidth = difficulty === '1' ? 50 : difficulty === '2' ? 35 : 20;
-        color = document.getElementById('color').value;
-        timeLeft = difficulty === '1' ? 5 : difficulty === '2' ? 2.5 : 1;
-        gamestartDialog.close();
-        interval = setInterval(updateTimer, 25);
-        nextBox();
+			difficulty = document.getElementById('difficulty').value;
+			boxWidth = difficulty === '1' ? 50 : difficulty === '2' ? 35 : 20;
+			color = document.getElementById('color').value;
+			timeLeft = difficulty === '1' ? 5 : difficulty === '2' ? 2.5 : 1;
+			gamestartDialog.close();
+			interval = setInterval(updateTimer, 25);
+			nextBox();
     }
 
     document.getElementById('startGame').addEventListener('click', startGame);
 
     function updateTimer() {
-        if (timeLeft > 0) {
-            timeLeft -= 0.025;
-            timerElement.textContent = `${timeLeft.toFixed(3)}`;
-        } else {
-            scoreElement.textContent = score;
-            gameoverDialog.showModal();
-            clearInterval(interval);
-        }
+			if (timeLeft > 0) {
+				timeLeft -= 0.025;
+				timerElement.textContent = `${timeLeft.toFixed(3)}`;
+			} else {
+				scoreElement.textContent = score;
+				gameoverDialog.showModal();
+				clearInterval(interval);
+			}
     }
 
     function boxClk() {
-        score++;
-        scoreElement.textContent = score;
-        timeLeft = difficulty === '1' ? 5 : difficulty === '2' ? 2.5 : 1;
-        updateTimer();
-        nextBox();
+			score++;
+			scoreElement.textContent = score;
+			timeLeft = difficulty === '1' ? 5 : difficulty === '2' ? 2.5 : 1;
+			updateTimer();
+			nextBox();
     }
-    });
+	});
 </script>
