@@ -1,8 +1,9 @@
 {
     "categoryName": "Books",
     "items": [
-        { "id": 201, "name": "The Great Gatsby", "shortname": "gatsby", "description": "A novel by F. Scott Fitzgerald.", "price": 10, "image": "https://place-hold.it/200x200" },
-        { "id": 202, "name": "Moby Dick", "shortname": "modydick", "description": "Classic book", "price": 15, "image": "https://place-hold.it/200x200" }
+      { "id": 201, "name": "The Great Gatsby", "shortname": "gatsby", "description": "A novel by F. Scott Fitzgerald.", "price": 10, "image": "https://place-hold.it/200x200", "notes": "" },
+      { "id": 203, "name": "1984", "shortname": "1984", "description": "A dystopian novel by George Orwell.", "price": 12, "image": "https://place-hold.it/200x200", "notes": "" },
+      { "id": 204, "name": "To Kill a Mockingbird", "shortname": "mockingbird", "description": "A novel by Harper Lee.", "price": 14, "image": "https://place-hold.it/200x200", "notes": "Lorem Ipsum" },
+      { "id": 205, "name": "Pride and Prejudice", "shortname": "pride", "description": "A novel by Jane Austen.", "price": 11, "image": "https://place-hold.it/200x200", "notes": "" }
     ]
   }
-  

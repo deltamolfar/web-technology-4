@@ -1,8 +1,10 @@
 {
     "categoryName": "Clothing",
     "items": [
-        { "id": 301, "name": "Jeans", "shortname": "jeans", "description": "Modern jeans.", "price": 50, "image": "https://place-hold.it/200x200" },
-        { "id": 302, "name": "Shorts", "shortname": "shorts", "description": "Nice cozy shorts.", "price": 20, "image": "https://place-hold.it/200x200" }
+      { "id": 301, "name": "Jeans", "shortname": "jeans", "description": "Modern jeans.", "price": 50, "image": "https://place-hold.it/200x200", "notes": "Lorem Ipsum" },
+      { "id": 302, "name": "Shorts", "shortname": "shorts", "description": "Nice cozy shorts.", "price": 20, "image": "https://place-hold.it/200x200", "notes": "" },
+      { "id": 303, "name": "T-Shirt", "shortname": "tshirt", "description": "Comfortable T-shirt.", "price": 15, "image": "https://place-hold.it/200x200", "notes": "Lorem Ipsum" },
+      { "id": 304, "name": "Jacket", "shortname": "jacket", "description": "Warm jacket.", "price": 100, "image": "https://place-hold.it/200x200", "notes": "" },
+      { "id": 305, "name": "Sneakers", "shortname": "sneakers", "description": "Stylish sneakers.", "price": 60, "image": "https://place-hold.it/200x200", "notes": "Lorem Ipsum" }
     ]
   }
-    
