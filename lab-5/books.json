@@ -1,0 +1,8 @@
+{
+    "categoryName": "Books",
+    "items": [
+        { "id": 201, "name": "The Great Gatsby", "shortname": "gatsby", "description": "A novel by F. Scott Fitzgerald.", "price": 10, "image": "https://place-hold.it/200x200" },
+        { "id": 202, "name": "Moby Dick", "shortname": "modydick", "description": "Classic book", "price": 15, "image": "https://place-hold.it/200x200" }
+    ]
+  }
+  

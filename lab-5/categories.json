@@ -1,0 +1,7 @@
+{
+  "categories": [
+    { "id": 1, "name": "Electronics", "shortname": "electronics", "notes": "Various electronic gadgets" },
+    { "id": 2, "name": "Books", "shortname": "books", "notes": "Fiction and non-fiction books" },
+    { "id": 3, "name": "Clothing", "shortname": "clothing", "notes": "Men's and Women's clothing" }
+  ]
+}

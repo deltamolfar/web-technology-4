@@ -1,0 +1,8 @@
+{
+  "categoryName": "Electronics",
+  "items": [
+    { "id": 101, "name": "Smartphone", "shortname": "smartphone", "description": "A modern smartphone.", "price": 300, "image": "https://place-hold.it/200x200" },
+    { "id": 102, "name": "Laptop", "shortname": "laptop", "description": "A powerful laptop.", "price": 800, "image": "https://place-hold.it/200x200" }
+  ]
+}
+  
